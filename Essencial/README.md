@@ -26,6 +26,8 @@ Todas as aulas usam o cenário de uma **loja online** com 4 tabelas:
 
 ## Como Usar
 
+Abra o terminal na pasta **`Essencial/`** (é onde estão `db.py`, `seed.sql` e os arquivos das aulas). Se você estiver na raiz do repositório `sql`, faça `cd Essencial` antes dos comandos abaixo.
+
 ```bash
 # 1. Popule o banco com os dados de exemplo
 python db.py seed
@@ -41,6 +43,8 @@ python db.py
 
 > **Dica:** para aulas 05 em diante, rode `python db.py seed` para popular o banco de uma vez.
 
+Para **apagar só as tabelas** (sem recriar dados), use `python db.py run 00drop-all.sql`. Para voltar ao estado inicial completo, rode de novo `python db.py seed`.
+
 ### Comandos do db.py
 
 | Comando                      | O que faz                              |
@@ -53,9 +57,11 @@ python db.py
 
 | Comando            | O que faz                         |
 |--------------------|-----------------------------------|
+| `.help`            | Lista os dot-commands disponíveis |
 | `.tables`          | Lista todas as tabelas            |
 | `.schema [tabela]` | Mostra o CREATE TABLE             |
 | `.read arquivo`    | Executa um arquivo `.sql`         |
+| `.select` + espaço + query | Executa um SELECT e imprime o resultado (ex.: `.select SELECT * FROM clientes`) |
 | `.quit`            | Sai do shell                      |
 
 O banco fica salvo em `data/loja.db`.
