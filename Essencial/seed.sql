@@ -5,7 +5,7 @@
 -- Use para pular direto para qualquer aula (05 em diante)
 -- ou para resetar o banco ao estado inicial.
 --
--- Uso:  .read /aulas/seed.sql
+-- Uso:  python db.py seed
 -- ============================================
 
 DROP TABLE IF EXISTS itens_pedido;

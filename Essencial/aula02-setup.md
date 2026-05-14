@@ -2,85 +2,92 @@
 
 ## Pré-requisito
 
-- [Docker Desktop](https://docs.docker.com/get-docker/) instalado e rodando
+- [Python 3](https://python.org) instalado (sem dependências extras — o SQLite já vem embutido no Python)
 
-## Subindo o Ambiente
+## Acessando o Shell SQL
 
 Abra o terminal na pasta `Essencial/` e rode:
 
 ```bash
-docker compose up -d
+python db.py
 ```
 
-Isso baixa a imagem do SQLite e deixa o container pronto.
-
-## Acessando o SQLite
-
-```bash
-docker compose exec sqlite sqlite3 /data/loja.db
-```
-
-Você vai ver o prompt do SQLite:
+Você vai ver o prompt do shell:
 
 ```
-SQLite version 3.x.x
-Enter ".help" for usage hints.
-sqlite>
+SQLite conectado em 'data/loja.db'
+Digite suas queries. Use '.tables' para listar tabelas, '.quit' para sair.
+
+sql>
 ```
 
-Pronto — você está dentro do banco `loja.db`. Tudo que você digitar aqui é SQL (ou comandos do SQLite).
+Pronto — você está dentro do banco `loja.db`. Tudo que você digitar aqui é SQL (ou dot-commands).
 
-## Comandos Úteis do SQLite (dot-commands)
+O banco fica salvo no arquivo `data/loja.db`. Se a pasta `data/` não existir, o `db.py` cria automaticamente.
 
-Esses comandos começam com `.` e são exclusivos do SQLite (não são SQL):
+## Comandos Úteis (dot-commands)
 
-```sql
--- listar todas as tabelas do banco
-.tables
+Esses comandos começam com `.` e funcionam dentro do shell:
 
--- ver a estrutura de uma tabela
-.schema clientes
+| Comando            | O que faz                         |
+|--------------------|-----------------------------------|
+| `.tables`          | Lista todas as tabelas            |
+| `.schema [tabela]` | Mostra o CREATE TABLE             |
+| `.read arquivo`    | Executa um arquivo `.sql`         |
+| `.quit`            | Sai do shell                      |
 
--- ativar modo coluna (saída formatada)
-.mode column
-.headers on
+Exemplo:
 
--- sair do SQLite
-.quit
 ```
+sql> .tables
+clientes  itens_pedido  pedidos  produtos
 
-> **Dica:** rode `.mode column` e `.headers on` sempre que entrar no SQLite para ter uma saída legível.
+sql> .schema clientes
+CREATE TABLE clientes ( ... );
+```
 
 ## Executando Arquivos .sql
 
-Em vez de digitar query por query, você pode rodar um arquivo inteiro:
+Em vez de digitar query por query, você pode rodar um arquivo inteiro de dentro do shell:
 
-```sql
-.read /aulas/aula03-criando-tabelas.sql
+```
+sql> .read aula03-criando-tabelas.sql
+```
+
+Ou diretamente pelo terminal, sem abrir o shell:
+
+```bash
+python db.py run aula03-criando-tabelas.sql
 ```
 
 Isso executa todas as queries do arquivo de uma vez.
 
+## Populando o Banco (Seed)
+
+Para criar todas as tabelas e inserir os dados de exemplo de uma vez:
+
+```bash
+python db.py seed
+```
+
+Isso roda o `seed.sql`, que cria as 4 tabelas e insere dados prontos para as aulas 05 em diante.
+
 ## Resetando o Banco
 
-Se quiser começar do zero, basta apagar o arquivo do banco e entrar de novo:
+Se quiser começar do zero, apague o arquivo do banco e rode o seed novamente:
 
 ```bash
-# de fora do container
-docker compose exec sqlite rm /data/loja.db
-docker compose exec sqlite sqlite3 /data/loja.db
+# apaga o banco
+rm data/loja.db
+
+# recria tudo
+python db.py seed
 ```
 
-Ou, de dentro do SQLite, rode o seed para recriar tudo:
+Ou, de dentro do shell, rode o seed diretamente:
 
-```sql
-.read /aulas/seed.sql
 ```
-
-## Parando o Container
-
-```bash
-docker compose down
+sql> .read seed.sql
 ```
 
 ---

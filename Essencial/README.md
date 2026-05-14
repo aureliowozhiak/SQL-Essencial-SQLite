@@ -16,7 +16,7 @@ Todas as aulas usam o cenário de uma **loja online** com 4 tabelas:
 | #  | Aula                        | Arquivo                          | Conteúdo                                    |
 |----|-----------------------------|---------------------------------|---------------------------------------------|
 | 01 | Introdução                  | `aula01-introducao.md`          | O que é banco de dados, SQL e SQLite        |
-| 02 | Setup do Ambiente           | `aula02-setup.md`               | Docker Compose + primeiros comandos         |
+| 02 | Setup do Ambiente           | `aula02-setup.md`               | Python + SQLite, primeiros comandos         |
 | 03 | Criando Tabelas             | `aula03-criando-tabelas.sql`    | CREATE TABLE, tipos, constraints            |
 | 04 | Manipulando Dados           | `aula04-manipulando-dados.sql`  | INSERT, UPDATE, DELETE                       |
 | 05 | Consultas Básicas           | `aula05-consultas-basicas.sql`  | SELECT, WHERE, operadores                   |
@@ -27,29 +27,40 @@ Todas as aulas usam o cenário de uma **loja online** com 4 tabelas:
 ## Como Usar
 
 ```bash
-# 1. Suba o container
-docker compose up -d
+# 1. Popule o banco com os dados de exemplo
+python db.py seed
 
-# 2. Acesse o SQLite
-docker compose exec sqlite sqlite3 /data/loja.db
+# 2. Abra o shell interativo
+python db.py
 
-# 3. Execute uma aula inteira
-.read /aulas/aula03-criando-tabelas.sql
+# 3. No shell, execute uma aula inteira
+.read aula03-criando-tabelas.sql
 
 # 4. Ou copie e cole cada query individualmente para acompanhar
 ```
 
-> **Dica:** para aulas 05 em diante, rode primeiro a `aula03` e `aula04` (ou use o `seed.sql`) para ter dados no banco.
+> **Dica:** para aulas 05 em diante, rode `python db.py seed` para popular o banco de uma vez.
 
-### Setup Rápido (pular para qualquer aula)
+### Comandos do db.py
 
-```bash
-docker compose exec sqlite sqlite3 /data/loja.db < seed.sql
-```
+| Comando                      | O que faz                              |
+|------------------------------|----------------------------------------|
+| `python db.py`               | Abre o shell SQL interativo            |
+| `python db.py seed`          | Cria tabelas e insere dados de exemplo |
+| `python db.py run ARQUIVO`   | Executa um arquivo `.sql`              |
 
-O arquivo `seed.sql` cria todas as tabelas e insere os dados de exemplo de uma vez.
+### Comandos dentro do shell
+
+| Comando            | O que faz                         |
+|--------------------|-----------------------------------|
+| `.tables`          | Lista todas as tabelas            |
+| `.schema [tabela]` | Mostra o CREATE TABLE             |
+| `.read arquivo`    | Executa um arquivo `.sql`         |
+| `.quit`            | Sai do shell                      |
+
+O banco fica salvo em `data/loja.db`.
 
 ## Pré-requisitos
 
-- [Docker](https://docs.docker.com/get-docker/) instalado
+- [Python 3](https://python.org) instalado (sem dependências extras)
 - Terminal (qualquer um: PowerShell, bash, zsh)
